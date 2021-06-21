@@ -262,7 +262,8 @@ a {
 	color: #fff;
 }
 .pagination {
-	margin: 0
+	margin: 0;
+	text-align: right;
 }
 .medical-modal {
 	position:absolute;

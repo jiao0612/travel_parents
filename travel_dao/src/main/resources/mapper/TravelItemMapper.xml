@@ -59,5 +59,8 @@
       </if>
     </where>
   </select>
+    <select id="findTravelGroupAndTravelItemByTravelItemId" resultType="java.lang.Integer">
+      select travelitem_id from t_travelgroup_travelitem where travelgroup_id = #{id}
+    </select>
 
 </mapper>

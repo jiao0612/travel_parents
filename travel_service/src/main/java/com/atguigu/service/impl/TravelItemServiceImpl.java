@@ -52,10 +52,21 @@ public class TravelItemServiceImpl implements TravelItemService {
     @Override
     public Result deleteByPrimaryKey(Integer id) {
         Result result = null;
+
         try {
+            //根据自由行id查询关联表的数据，如果存在关联，抛出异常，无法删除。
+            int count = travelItemMapper.findTravelGroupAndTravelItemByTravelItemId(id);
+            if(count>0){ //说明存在关联数据
+                throw new RuntimeException(MessageConstant.DELETE_RELATIONSHIP_ERROR);
+            }
             travelItemMapper.deleteByPrimaryKey(id);
             result = new Result(true, MessageConstant.DELETE_TRAVELITEM_SUCCESS);
-        } catch (Exception e) {
+
+        }catch (RuntimeException ex){
+            ex.printStackTrace();
+            return new Result(false,ex.getMessage());
+        }
+        catch (Exception e) {
             result = new Result(false, MessageConstant.DELETE_TRAVELITEM_FAIL);
             e.printStackTrace();
         }
@@ -75,5 +86,11 @@ public class TravelItemServiceImpl implements TravelItemService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public PageResult findAll() {
+        Page<TravelItem> travelItems = travelItemMapper.selectAll(null);
+        return new PageResult(travelItems.getTotal(), travelItems.getResult());
     }
 }

@@ -44,4 +44,6 @@ public interface TravelItemMapper {
      * @mbg.generated Thu Jun 17 17:20:34 SGT 2021
      */
     int updateByPrimaryKey(TravelItem record);
+
+    int findTravelGroupAndTravelItemByTravelItemId(Integer id);
 }

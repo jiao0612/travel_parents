@@ -42,4 +42,5 @@ public interface TravelItemService {
     Result updateByPrimary(TravelItem travelItem);
 
 
+    PageResult findAll();
 }

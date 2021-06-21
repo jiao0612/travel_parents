@@ -44,6 +44,12 @@ public class TravelItemController {
         PageResult pageResult = travelItemService.selectByPage(queryPageBean);
         return pageResult;
     }
+    @RequestMapping(value = "/findPages",method = RequestMethod.POST)
+    public PageResult findPages(){
+        PageResult pageResult = travelItemService.findAll();
+        return pageResult;
+    }
+
     /**
     *@Author dell
     *@Date :row
