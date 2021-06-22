@@ -6,6 +6,7 @@ import com.atguigu.entity.QueryPageBean;
 import com.atguigu.entity.Result;
 import com.atguigu.pojo.TravelGroup;
 import com.atguigu.service.TravelGroupService;
+import com.github.pagehelper.Page;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,11 @@ public class TravelGroupController {
     public Result findPageById(Integer id){
         Result result = travelGroupService.findPageById(id);
         return result;
+    }
+    @RequestMapping(value = "/findAll",method = RequestMethod.POST)
+    public PageResult findAll(){
+        PageResult pageResult = travelGroupService.findAll();
+        return pageResult;
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)

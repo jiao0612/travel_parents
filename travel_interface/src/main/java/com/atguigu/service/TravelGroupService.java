@@ -20,4 +20,7 @@ public interface TravelGroupService {
     Result findGroupAndItemByGroupId(Integer id);
 
     Result delete(Integer id);
+
+    PageResult findAll();
+
 }

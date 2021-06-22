@@ -21,7 +21,6 @@
   </delete>
 
   <insert id="insert" parameterType="com.atguigu.pojo.TravelItem">
-
     insert into t_travelitem (id, code, name, 
       sex, age, price, type, 
       attention, remark)
@@ -29,8 +28,8 @@
       #{sex,jdbcType=CHAR}, #{age,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, #{type,jdbcType=CHAR}, 
       #{attention,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.atguigu.pojo.TravelItem">
 
+  <update id="updateByPrimaryKey" parameterType="com.atguigu.pojo.TravelItem">
     update t_travelitem
     set code = #{code,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
@@ -44,7 +43,6 @@
   </update>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-
     select id, code, name, sex, age, price, type, attention, remark
     from t_travelitem
     where id = #{id,jdbcType=INTEGER}

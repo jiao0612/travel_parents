@@ -105,6 +105,12 @@ public class TravelGroupServiceImpl implements TravelGroupService {
         return result;
     }
 
+    @Override
+    public PageResult findAll() {
+        Page page = travelGroupMapper.selectAll(null);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
     private void setTravelGroupAndItemByTravelItemId(Integer travelGroupId, Integer[] travelItemIds) {
         if (travelItemIds != null && travelItemIds.length > 0){
             for (Integer travelItemId : travelItemIds) {
