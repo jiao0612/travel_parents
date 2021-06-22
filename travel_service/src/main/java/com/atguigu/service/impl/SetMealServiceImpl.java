@@ -2,6 +2,7 @@ package com.atguigu.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.constant.MessageConstant;
+import com.atguigu.constant.RedisConstant;
 import com.atguigu.dao.SetmealMapper;
 import com.atguigu.entity.PageResult;
 import com.atguigu.entity.QueryPageBean;
@@ -13,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +26,9 @@ public class SetMealServiceImpl implements SetMealService {
     @Autowired
     @Qualifier("setmealMapper")
     private SetmealMapper setmealMapper;
+
+    @Autowired
+    private JedisPool jedisPool;
 
     @Override
     public PageResult findPages(QueryPageBean queryPageBean) {
@@ -39,6 +44,7 @@ public class SetMealServiceImpl implements SetMealService {
             setmealMapper.insert(setmeal);//主键回显
             setMealAndGroupByMealId(setmeal.getId(),travelgroupIds);
             result = new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
+            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());
         } catch (Exception e) {
             result=  new Result(false, MessageConstant.ADD_SETMEAL_FAIL);
             e.printStackTrace();

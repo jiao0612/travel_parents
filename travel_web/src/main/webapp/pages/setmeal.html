@@ -256,7 +256,8 @@
                         //添加成功，提示，回显图片
                         this.$message.success(response.message);
                         var suffix  = "http://qv244k84w.hb-bkt.clouddn.com/";
-                        this.imageUrl = suffix.concat(response.data)
+                        this.imageUrl = suffix.concat(response.data);
+                        this.formData.img = response.data;
                     }else {
                         //添加失败
                         this.$message.error(response.message);

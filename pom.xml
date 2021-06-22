@@ -14,6 +14,7 @@
         <module>travel_interface</module>
         <module>travel_service</module>
         <module>travel_web</module>
+        <module>travel_jobs</module>
     </modules>
     <packaging>pom</packaging>
 
