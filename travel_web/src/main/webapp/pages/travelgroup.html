@@ -387,7 +387,7 @@
                             var pages = Math.ceil((this.pagination.total - 1) / this.pagination.pageSize);//获取总页数
                             //如果在记录数为0
                             pages = pages > 0 ? pages:1;
-                            this.pagination.currentPage = pages;
+                            this.pagination.currentPage = this.pagination.currentPage > pages?pages:this.pagination.currentPage;
                             this.findPage();
                         }).catch((err)=>{alert(err)})
                     }).catch(() => {

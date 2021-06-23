@@ -25,13 +25,14 @@ public class TravelItemController {
     */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Result response(@RequestBody TravelItem travelItem){
-        /*增加自由行记录*/
+
         try {
             travelItemService.add(travelItem);
+            return new Result(true, MessageConstant.ADD_TRAVELITEM_SUCCESS);
         } catch (Exception e) {
+            e.printStackTrace();
             return new Result(false, MessageConstant.ADD_TRAVELITEM_FAIL);
         }
-        return new Result(true, MessageConstant.ADD_TRAVELITEM_SUCCESS);
     }
     /**
     *@Author dell
@@ -41,13 +42,11 @@ public class TravelItemController {
     */
     @RequestMapping(value = "/selectPages",method = RequestMethod.POST)
     public PageResult select( @RequestBody QueryPageBean queryPageBean){
-        PageResult pageResult = travelItemService.selectByPage(queryPageBean);
-        return pageResult;
+        return travelItemService.selectByPage(queryPageBean);
     }
     @RequestMapping(value = "/findPages",method = RequestMethod.POST)
     public PageResult findPages(){
-        PageResult pageResult = travelItemService.findAll();
-        return pageResult;
+        return travelItemService.findAll();
     }
 
     /**
@@ -58,8 +57,17 @@ public class TravelItemController {
     */
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Result delete(@RequestBody TravelItem row){
-        Result result = travelItemService.deleteByPrimaryKey(row.getId());
-        return result;
+        try {
+            travelItemService.deleteByPrimaryKey(row.getId());
+            return new Result(true, MessageConstant.DELETE_TRAVELITEM_SUCCESS);
+        }catch (RuntimeException ex){
+            ex.printStackTrace();
+            return new Result(false,ex.getMessage());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_TRAVELITEM_FAIL);
+        }
     }
 
     /**
@@ -70,7 +78,14 @@ public class TravelItemController {
     */
     @RequestMapping(value = "/edit",method =RequestMethod.POST)
     public Result update(@RequestBody TravelItem travelItem){
-        Result result = travelItemService.updateByPrimary(travelItem);
-        return result;
+        try {
+            travelItemService.updateByPrimary(travelItem);
+            /*更新成功*/
+            return new Result(true, MessageConstant.EDIT_TRAVELITEM_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            /*更新失败*/
+            return new Result(false, MessageConstant.EDIT_TRAVELITEM_FAIL);
+        }
     }
 }

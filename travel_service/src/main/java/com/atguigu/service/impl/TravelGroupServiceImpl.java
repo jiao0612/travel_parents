@@ -34,47 +34,28 @@ public class TravelGroupServiceImpl implements TravelGroupService {
     }
 
     @Override
-    public Result add(TravelGroup travelGroup, Integer[] travelItemIds) {
-        Result result = null;
-        try {
-            travelGroupMapper.insert(travelGroup);//返回结果id
-            /*封装参数，添加表连接数据*/
-            setTravelGroupAndItemByTravelItemId(travelGroup.getId(), travelItemIds);
-            result = new Result(true, MessageConstant.ADD_TRAVELGROUP_SUCCESS);
-        } catch (Exception e) {
-            result = new Result(false, MessageConstant.ADD_TRAVELGROUP_FAIL);
-            e.printStackTrace();
-        }
-        return result;
+    public void add(TravelGroup travelGroup, Integer[] travelItemIds) {
+        travelGroupMapper.insert(travelGroup);//返回结果id
+        /*封装参数，添加表连接数据*/
+        setTravelGroupAndItemByTravelItemId(travelGroup.getId(), travelItemIds);
     }
 
     @Override
     public Result findPageById(Integer id) {
-        Result result = null;
         try {
             TravelGroup travelGroup = travelGroupMapper.selectByPrimaryKey(id);
-            result = new Result(true, MessageConstant.QUERY_TRAVELGROUP_SUCCESS,travelGroup);
+            return new Result(true, MessageConstant.QUERY_TRAVELGROUP_SUCCESS,travelGroup);
         } catch (Exception e) {
-            result = new Result(false, MessageConstant.QUERY_TRAVELGROUP_FAIL);
             e.printStackTrace();
+            return new Result(false, MessageConstant.QUERY_TRAVELGROUP_FAIL);
         }
-        return result;
     }
 
     @Override
-    public Result update(TravelGroup travelGroup,Integer[] travelItemIds) {
-        Result result = null;
-        try {
-            travelGroupMapper.updateByPrimaryKey(travelGroup);//编辑跟团游
-            travelGroupMapper.deleteTravelGroupAndItemByTravelItemId(travelGroup.getId());//删除外键表列
-            setTravelGroupAndItemByTravelItemId(travelGroup.getId(), travelItemIds);//编辑自由行
-
-            result = new Result(true, MessageConstant.EDIT_TRAVELGROUP_SUCCESS);
-        } catch (Exception e) {
-            result = new Result(false, MessageConstant.EDIT_TRAVELGROUP_FAIL);
-            e.printStackTrace();
-        }
-        return result;
+    public void update(TravelGroup travelGroup,Integer[] travelItemIds) {
+        travelGroupMapper.updateByPrimaryKey(travelGroup);//编辑跟团游
+        travelGroupMapper.deleteTravelGroupAndItemByTravelItemId(travelGroup.getId());//删除外键表列
+        setTravelGroupAndItemByTravelItemId(travelGroup.getId(), travelItemIds);//编辑自由行
     }
 
     @Override
@@ -82,27 +63,17 @@ public class TravelGroupServiceImpl implements TravelGroupService {
         Result result = null;
         try {
             List<Integer> list = travelGroupMapper.findGroupAndItemByGroupId(id);
-            result = new Result(true, MessageConstant.QUERY_GROUPANDITEM_LIST_SUCCESS,list);
+            return new Result(true, MessageConstant.QUERY_GROUPANDITEM_LIST_SUCCESS,list);
         } catch (Exception e) {
-            result = new Result(false, MessageConstant.QUERY_GROUPANDITEM_LIST_FAIL);
             e.printStackTrace();
+            return new Result(false, MessageConstant.QUERY_GROUPANDITEM_LIST_FAIL);
         }
-        return result;
     }
 
     @Override
-    public Result delete(Integer id) {
-        Result result =null;
-        try {
-            travelGroupMapper.deleteTravelGroupAndItemByTravelItemId(id);//删除外键表列
-            travelGroupMapper.deleteByPrimaryKey(id);//删除主键表列
-
-            result = new Result(true, MessageConstant.DELETE_TRAVELGROUP_SUCCESS);
-        } catch (Exception e) {
-            result = new Result(false, MessageConstant.DELETE_TRAVELGROUP_FAIL);
-            e.printStackTrace();
-        }
-        return result;
+    public void delete(Integer id) {
+        travelGroupMapper.deleteTravelGroupAndItemByTravelItemId(id);//删除外键表列
+        travelGroupMapper.deleteByPrimaryKey(id);//删除主键表列
     }
 
     @Override

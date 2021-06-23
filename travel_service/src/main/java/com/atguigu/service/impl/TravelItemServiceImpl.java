@@ -25,18 +25,9 @@ public class TravelItemServiceImpl implements TravelItemService {
     private TravelItemMapper travelItemMapper;
 
     @Override
-    public Result add(TravelItem travelItem) {
-        Result result = null;
+    public void add(TravelItem travelItem) {
         /*增加自由行记录*/
-        int insert = 0;
-        try {
-            insert = travelItemMapper.insert(travelItem);
-            result = new Result(true, MessageConstant.ADD_TRAVELITEM_SUCCESS);
-        } catch (Exception e) {
-            result = new Result(false, MessageConstant.ADD_TRAVELITEM_FAIL);
-            e.printStackTrace();
-        }
-        return result;
+        travelItemMapper.insert(travelItem);
     }
 
     @Override
@@ -50,42 +41,18 @@ public class TravelItemServiceImpl implements TravelItemService {
     }
 
     @Override
-    public Result deleteByPrimaryKey(Integer id) {
-        Result result = null;
-
-        try {
-            //根据自由行id查询关联表的数据，如果存在关联，抛出异常，无法删除。
-            int count = travelItemMapper.findTravelGroupAndTravelItemByTravelItemId(id);
-            if(count>0){ //说明存在关联数据
-                throw new RuntimeException(MessageConstant.DELETE_RELATIONSHIP_ERROR);
-            }
-            travelItemMapper.deleteByPrimaryKey(id);
-            result = new Result(true, MessageConstant.DELETE_TRAVELITEM_SUCCESS);
-
-        }catch (RuntimeException ex){
-            ex.printStackTrace();
-            return new Result(false,ex.getMessage());
+    public void deleteByPrimaryKey(Integer id) {
+        //根据自由行id查询关联表的数据，如果存在关联，抛出异常，无法删除。
+        int count = travelItemMapper.findTravelGroupAndTravelItemByTravelItemId(id);
+        if(count>0){ //说明存在关联数据
+            throw new RuntimeException(MessageConstant.DELETE_RELATIONSHIP_ERROR);
         }
-        catch (Exception e) {
-            result = new Result(false, MessageConstant.DELETE_TRAVELITEM_FAIL);
-            e.printStackTrace();
-        }
-        return result;
+        travelItemMapper.deleteByPrimaryKey(id);
     }
 
     @Override
-    public Result updateByPrimary(TravelItem travelItem) {
-        Result result = null;
-        try {
-            travelItemMapper.updateByPrimaryKey(travelItem);
-            /*更新成功*/
-            result = new Result(true, MessageConstant.EDIT_TRAVELITEM_SUCCESS);
-        } catch (Exception e) {
-            /*更新失败*/
-            result = new Result(false, MessageConstant.EDIT_TRAVELITEM_FAIL);
-            e.printStackTrace();
-        }
-        return result;
+    public void updateByPrimary(TravelItem travelItem) {
+        travelItemMapper.updateByPrimaryKey(travelItem);
     }
 
     @Override

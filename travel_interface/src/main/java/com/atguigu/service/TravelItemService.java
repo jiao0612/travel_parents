@@ -15,7 +15,7 @@ public interface TravelItemService {
     *@returnType: void
     *@Description: 增加自由行
     */
-    Result add(TravelItem travelItem);
+    void add(TravelItem travelItem);
 
     /**
     *@Author dell
@@ -31,7 +31,7 @@ public interface TravelItemService {
      *@returnType:result
      *@Description:根据row.id删除自由行
      */
-    Result deleteByPrimaryKey(Integer id);
+    void deleteByPrimaryKey(Integer id);
 
     /**
     *@Author dell
@@ -39,7 +39,7 @@ public interface TravelItemService {
     *@returnType:void
     *@Description:更新自由行数据
     */
-    Result updateByPrimary(TravelItem travelItem);
+    void updateByPrimary(TravelItem travelItem);
 
 
     PageResult findAll();

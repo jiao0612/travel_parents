@@ -7,6 +7,7 @@ import com.atguigu.dao.SetmealMapper;
 import com.atguigu.entity.PageResult;
 import com.atguigu.entity.QueryPageBean;
 import com.atguigu.entity.Result;
+import com.atguigu.pojo.Member;
 import com.atguigu.pojo.Setmeal;
 import com.atguigu.service.SetMealService;
 import com.github.pagehelper.Page;
@@ -14,9 +15,11 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service(interfaceClass = SetMealService.class)
@@ -38,25 +41,48 @@ public class SetMealServiceImpl implements SetMealService {
     }
 
     @Override
-    public Result add(Setmeal setmeal, Integer[] travelgroupIds) {
+    public void add(Setmeal setmeal, Integer[] travelgroupIds) {
+        setmealMapper.insert(setmeal);//主键回显
+        setMealAndGroupByMealId(setmeal.getId(),travelgroupIds);//设置关联数据
+        jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());//图片名称存储到redis集合
+    }
+
+    @Override
+    public Result findPagesById(Integer id) {
         Result result = null;
         try {
-            setmealMapper.insert(setmeal);//主键回显
-            setMealAndGroupByMealId(setmeal.getId(),travelgroupIds);
-            result = new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
-            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());
+            Setmeal setmeal = setmealMapper.selectByPrimaryKey(id);
+            result = new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS,setmeal);
         } catch (Exception e) {
-            result=  new Result(false, MessageConstant.ADD_SETMEAL_FAIL);
             e.printStackTrace();
+            result = new Result(false, MessageConstant.QUERY_SETMEAL_FAIL);
         }
         return result;
     }
 
-    private void setMealAndGroupByMealId(Integer setMealId, Integer[] travelgroupIds) {
+    @Override
+    public void updateMealById(Setmeal setmeal ,Integer[] travelgroupIds) {
+        setmealMapper.updateByPrimaryKey(setmeal);
+        /*删除原有的mealid和group数据，再去新增*/
+        deleteMealAndGroupByMealId(setmeal.getId());
+        setMealAndGroupByMealId(setmeal.getId(), travelgroupIds);
+    }
 
+    @Override
+    public List<Integer> findArrByMealId(Integer id) {
+        return setmealMapper.selectMealAndGroupByMealId(id);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        deleteMealAndGroupByMealId(id);
+        /*在删除meal数据*/
+        setmealMapper.deleteByPrimaryKey(id);
+    }
+
+    private void setMealAndGroupByMealId(Integer setMealId, Integer[] travelgroupIds) {
         /*根据mealid添加mealgroup数据*/
         if (travelgroupIds != null && travelgroupIds.length > 0){
-
             for (Integer travelGroupId : travelgroupIds) {
                 Map<String,Integer> map = new HashMap<>();
                 map.put("setMealId", setMealId);
@@ -64,8 +90,12 @@ public class SetMealServiceImpl implements SetMealService {
                 setmealMapper.setMealAndGroupByMealId(map);
             }
         }
-
-
     }
-
+    private void deleteMealAndGroupByMealId(Integer setMealId) {
+        try {
+            setmealMapper.deleteMealAndGroupByMealId(setMealId);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
 }

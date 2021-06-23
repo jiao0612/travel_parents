@@ -69,4 +69,10 @@ public class MessageConstant {
     public static final String QUERY_GROUPANDITEM_LIST_SUCCESS = "查询跟团游和自由行数据成功";
     public static final String QUERY_GROUPANDITEM_LIST_FAIL = "查询跟团游和自由行数据失败";
     public static final String DELETE_RELATIONSHIP_ERROR = "删除数据失败，存在关联数据";
+    public static final String EDIT_SETMEAL_SUCEESS = "编辑套餐成功";
+    public static final String EDIT_SETMEAL_FILE = "编辑套餐失败";
+    public static final String QUERY_MEALANDGROUP_SUCCESS = "查询套餐和跟团游数据成功";
+    public static final String QUERY_MEALANDGROUP_FAIL = "查询套餐和跟团游数据失败";
+    public static final String DELETE_MEAL_FILE = "删除套餐失败";
+    public static final String DELETE_MEAL_SUCCESS = "删除套餐成功";
 }

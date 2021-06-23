@@ -1,6 +1,7 @@
 package com.atguigu.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.atguigu.constant.MessageConstant;
 import com.atguigu.entity.PageResult;
 import com.atguigu.entity.QueryPageBean;
 import com.atguigu.entity.Result;
@@ -24,43 +25,54 @@ public class TravelGroupController {
 
     @RequestMapping(value = "/findPages",method = RequestMethod.POST)
     public PageResult findPages( @RequestBody QueryPageBean queryPageBean){
-        PageResult pageResult = travelGroupService.findPages(queryPageBean);
-        return pageResult;
+        return travelGroupService.findPages(queryPageBean);
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Result add(@RequestBody TravelGroup travelGroup ,Integer[] travelItemIds ){
-        Result result =  travelGroupService.add(travelGroup,travelItemIds);
-        return result;
+        try {
+            travelGroupService.add(travelGroup,travelItemIds);
+            return new Result(true, MessageConstant.ADD_TRAVELGROUP_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.ADD_TRAVELGROUP_FAIL);
+        }
     }
 
     @RequestMapping(value = "/findPageById",method = RequestMethod.GET)
     public Result findPageById(Integer id){
-        Result result = travelGroupService.findPageById(id);
-        return result;
+        return travelGroupService.findPageById(id);
     }
+
     @RequestMapping(value = "/findAll",method = RequestMethod.POST)
     public PageResult findAll(){
-        PageResult pageResult = travelGroupService.findAll();
-        return pageResult;
+        return travelGroupService.findAll();
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public Result update(@RequestBody TravelGroup travelGroup, Integer[] travelItemIds){
-        Result result = travelGroupService.update(travelGroup,travelItemIds);
-        return  result;
+        try {
+            travelGroupService.update(travelGroup,travelItemIds);
+            return new Result(true, MessageConstant.EDIT_TRAVELGROUP_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.EDIT_TRAVELGROUP_FAIL);
+        }
     }
 
     @RequestMapping(value = "/findGroupAndItemByGroupId",method = RequestMethod.GET)
     public Result findGroupAndItemByGroupId(Integer id){
-        Result result = travelGroupService.findGroupAndItemByGroupId(id);
-        return result;
+        return travelGroupService.findGroupAndItemByGroupId(id);
     }
 
     @RequestMapping(value = "/delete",method = RequestMethod.GET)
     public Result delete(Integer id){
-        Result result = travelGroupService.delete(id);
-        return result;
+        try {
+            travelGroupService.delete(id);
+            return new Result(true, MessageConstant.DELETE_TRAVELGROUP_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_TRAVELGROUP_FAIL);
+        }
     }
-
 }

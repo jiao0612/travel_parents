@@ -16,12 +16,15 @@
   </resultMap>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-
     delete from t_setmeal
     where id = #{id,jdbcType=INTEGER}
   </delete>
+    <delete id="deleteMealAndGroupByMealId" parameterType="integer">
+      delete from t_setmeal_travelgroup
+      where setmeal_id = #{setMealId,jdbcType=INTEGER}
+    </delete>
 
-  <insert id="insert" parameterType="com.atguigu.pojo.Setmeal" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.atguigu.pojo.Setmeal" useGeneratedKeys="true" keyProperty="id">
 
     insert into t_setmeal (id, name, code, 
       helpCode, sex, age, price, 
@@ -69,4 +72,9 @@
       </if>
     </where>
   </select>
+  <select id="selectMealAndGroupByMealId" resultType="java.lang.Integer">
+    select travelgroup_id from t_setmeal_travelgroup
+    where setmeal_id = #{id,jdbcType=INTEGER}
+  </select>
+
 </mapper>

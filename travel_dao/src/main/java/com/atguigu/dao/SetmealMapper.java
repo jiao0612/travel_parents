@@ -1,5 +1,6 @@
 package com.atguigu.dao;
 
+import com.atguigu.entity.Result;
 import com.atguigu.pojo.Setmeal;
 import com.github.pagehelper.Page;
 
@@ -48,4 +49,8 @@ public interface SetmealMapper {
     int updateByPrimaryKey(Setmeal record);
 
     void setMealAndGroupByMealId(Map map);
+
+    List<Integer> selectMealAndGroupByMealId(Integer id);
+
+    void deleteMealAndGroupByMealId(Integer setMealId);
 }

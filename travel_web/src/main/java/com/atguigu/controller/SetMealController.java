@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +31,6 @@ public class SetMealController {
     /*上传图片到七牛云*/
     @RequestMapping("/upload")
     public Result uploadImgFileToQiNuiServer(@RequestParam("imgFile") MultipartFile imgFile) {
-        Result result = null;
         try {
             /*设置文件名*/
             String newFileName = UUID.randomUUID().toString()+imgFile.getOriginalFilename().substring(imgFile.getOriginalFilename().lastIndexOf("."));
@@ -39,32 +39,75 @@ public class SetMealController {
             /*执行上传操作*/
             QiniuUtils.upload2Qiniu(bytes,newFileName);
             /*返回结果，包含上传文件名，回显图片*/
-            result = new Result(true, MessageConstant.UPLOAD_SUCCESS,newFileName);
             try {
                 jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES,newFileName);
             } catch (Exception e) {
-                result = new Result(false, MessageConstant.PIC_UPLOAD_FAIL);
                 e.printStackTrace();
+                return new Result(false, MessageConstant.PIC_UPLOAD_FAIL);
             }
+            return new Result(true, MessageConstant.UPLOAD_SUCCESS,newFileName);
         } catch (IOException e) {
             e.printStackTrace();
-            result = new Result(false, MessageConstant.PIC_UPLOAD_FAIL);
+            return new Result(false, MessageConstant.PIC_UPLOAD_FAIL);
         }
-        return result;
     }
 
     @RequestMapping(value = "/findPages", method = RequestMethod.POST)
     public PageResult findPages(@RequestBody QueryPageBean queryPageBean) {
-        PageResult pageResult = setMealService.findPages(queryPageBean);
-        return pageResult;
+        return setMealService.findPages(queryPageBean);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Result add(@RequestBody Setmeal setmeal , Integer[] travelgroupIds) {
         /*增加套餐信息*/
-        Result result = setMealService.add(setmeal,travelgroupIds);
+        try {
+            setMealService.add(setmeal,travelgroupIds);
+            return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  new Result(false, MessageConstant.ADD_SETMEAL_FAIL);
+        }
+    }
 
-        return result;
+    @RequestMapping(value = "/findPagesById", method = RequestMethod.GET)
+    public Result findPagesById(Integer id){
+        return setMealService.findPagesById(id);
+    }
+
+    @RequestMapping(value = "/findArrByMealId",method = RequestMethod.GET)
+    public Result findArrByMealId(Integer id){
+        try {
+            List<Integer> list = setMealService.findArrByMealId(id);
+            return  new Result(true, MessageConstant.QUERY_MEALANDGROUP_SUCCESS,list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(true, MessageConstant.QUERY_MEALANDGROUP_FAIL);
+        }
+    }
+
+    @RequestMapping(value = "/updateMealById", method = RequestMethod.POST)
+    public Result updateMealById(@RequestBody Setmeal setmeal,Integer[] travelgroupIds){
+        try {
+            setMealService.updateMealById(setmeal,travelgroupIds);
+            return new Result(true, MessageConstant.EDIT_SETMEAL_SUCEESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.EDIT_SETMEAL_FILE);
+        }
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public Result delete(Integer id){
+        try {
+            setMealService.delete(id);
+            return new Result(true, MessageConstant.DELETE_MEAL_SUCCESS);
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_RELATIONSHIP_ERROR);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_MEAL_FILE);
+        }
     }
 
 }

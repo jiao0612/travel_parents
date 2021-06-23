@@ -11,15 +11,15 @@ public interface TravelGroupService {
 
     PageResult findPages(QueryPageBean queryPageBean);
 
-    Result add(TravelGroup travelGroup, Integer[] travelItemIds);
+    void add(TravelGroup travelGroup, Integer[] travelItemIds);
 
     Result findPageById(Integer id);
 
-    Result update(TravelGroup travelGroup,Integer[] travelItemIds);
+    void update(TravelGroup travelGroup,Integer[] travelItemIds);
 
     Result findGroupAndItemByGroupId(Integer id);
 
-    Result delete(Integer id);
+    void delete(Integer id);
 
     PageResult findAll();
 
