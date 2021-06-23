@@ -1,7 +1,10 @@
 package com.atguigu.dao;
 
 import com.atguigu.pojo.OrderSetting;
+
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderSettingMapper {
     /**
@@ -43,4 +46,12 @@ public interface OrderSettingMapper {
      * @mbg.generated Thu Jun 17 17:20:34 SGT 2021
      */
     int updateByPrimaryKey(OrderSetting record);
+
+    Integer selectByOrderDate(Date date);
+
+    void updateByOrderDate(OrderSetting orderSetting);
+
+    void updateNumberByOrderDate(OrderSetting orderSetting);
+
+    List<OrderSetting> selectAllByOrderDate(Map param);
 }
