@@ -75,4 +75,5 @@ public class MessageConstant {
     public static final String QUERY_MEALANDGROUP_FAIL = "查询套餐和跟团游数据失败";
     public static final String DELETE_MEAL_FILE = "删除套餐失败";
     public static final String DELETE_MEAL_SUCCESS = "删除套餐成功";
+    public static final String SEND_VALIDATECODE_DOUBLE = "请勿重复获取验证码，若忘记，请在5分钟后再试";
 }
