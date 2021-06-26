@@ -4,11 +4,13 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.constant.MessageConstant;
 import com.atguigu.constant.RedisConstant;
 import com.atguigu.dao.SetmealMapper;
+import com.atguigu.dao.TravelGroupMapper;
 import com.atguigu.entity.PageResult;
 import com.atguigu.entity.QueryPageBean;
 import com.atguigu.entity.Result;
 import com.atguigu.pojo.Member;
 import com.atguigu.pojo.Setmeal;
+import com.atguigu.pojo.TravelGroup;
 import com.atguigu.service.SetMealService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -79,6 +81,7 @@ public class SetMealServiceImpl implements SetMealService {
         /*在删除meal数据*/
         setmealMapper.deleteByPrimaryKey(id);
     }
+
 
     private void setMealAndGroupByMealId(Integer setMealId, Integer[] travelgroupIds) {
         /*根据mealid添加mealgroup数据*/
