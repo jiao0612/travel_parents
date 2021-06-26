@@ -61,4 +61,10 @@
       select count(travelgroup_id) from t_travelgroup_travelitem where travelitem_id = #{id}
     </select>
 
+    <select id="findAllByTravelGroupId" resultMap="BaseResultMap" parameterType="integer" >
+          select id, code, name, sex, age, price, type, attention, remark
+          from t_travelitem,t_travelgroup_travelitem
+          where id = travelitem_id and travelgroup_id = #{id}
+    </select>
+
 </mapper>

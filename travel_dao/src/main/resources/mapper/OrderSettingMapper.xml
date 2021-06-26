@@ -39,7 +39,14 @@
       where orderDate = #{orderDate,jdbcType=DATE}
   </update>
 
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <update id="updateReservationsByOrderSetting" parameterType="map">
+        update t_ordersetting
+        set  reservations = #{reservations,jdbcType=INTEGER},
+             number = #{number,jdbcType=INTEGER}
+        where orderDate = #{orderDate,jdbcType=DATE}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, orderDate, number, reservations
     from t_ordersetting
     where id = #{id,jdbcType=INTEGER}
@@ -58,4 +65,10 @@
       select id,orderDate,number,reservations from t_ordersetting
         where orderDate between '${start}' and '${end}'
   </select>
+  <select id="selectOrderSettingByOrderDate" resultType="com.atguigu.pojo.OrderSetting">
+        select id, orderDate, number, reservations
+        from t_ordersetting
+        where orderDate = #{orderDate,jdbcType=DATE}
+    </select>
+
 </mapper>

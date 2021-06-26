@@ -43,4 +43,6 @@ public interface MemberMapper {
      * @mbg.generated Thu Jun 17 17:20:34 SGT 2021
      */
     int updateByPrimaryKey(Member record);
+
+    Member selectMemberByTelephone(String telephone);
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.atguigu.dao.TravelGroupMapper">
   <resultMap id="BaseResultMap" type="com.atguigu.pojo.TravelGroup">
     <id column="id" jdbcType="INTEGER" property="id" />
@@ -9,6 +10,8 @@
     <result column="sex" jdbcType="CHAR" property="sex" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="attention" jdbcType="VARCHAR" property="attention" />
+
+    <collection property="travelItems" select="com.atguigu.dao.TravelItemMapper.findAllByTravelGroupId" column="id"/>
   </resultMap>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -63,5 +66,13 @@
   <select id="findGroupAndItemByGroupId" resultType="java.lang.Integer" parameterType="integer">
     select travelitem_id from t_travelgroup_travelitem
     where travelgroup_id = #{id}
+
   </select>
+
+    <select id="findTravelGroupsById" resultMap="BaseResultMap" parameterType="integer">
+        select id, code, name, helpCode, sex, remark, attention
+        from t_travelgroup ,t_setmeal_travelgroup
+        where id = travelgroup_id and setmeal_id = #{id}
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.atguigu.dao;
 
 import com.atguigu.entity.Result;
 import com.atguigu.pojo.Setmeal;
+import com.atguigu.pojo.TravelGroup;
 import com.github.pagehelper.Page;
 
 import java.util.List;
@@ -53,4 +54,6 @@ public interface SetmealMapper {
     List<Integer> selectMealAndGroupByMealId(Integer id);
 
     void deleteMealAndGroupByMealId(Integer setMealId);
+
+    List<Setmeal> findAllPages();
 }
