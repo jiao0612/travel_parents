@@ -15,6 +15,7 @@
         <module>travel_service</module>
         <module>travel_web</module>
         <module>travel_jobs</module>
+        <module>travel_mobile_web</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -35,6 +36,8 @@
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
         <spring.security.version>5.0.5.RELEASE</spring.security.version>
         <poi.version>3.14</poi.version>
+        <aliyun.core.version>3.3.1</aliyun.core.version>
+        <aliyun.dysmsapi.version>1.0.0</aliyun.dysmsapi.version>
         <jedis.version>2.9.0</jedis.version>
         <quartz.version>2.2.1</quartz.version>
     </properties>
@@ -201,6 +204,17 @@
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
                 <version>${jedis.version}</version>
+            </dependency>
+            <!--阿里云服务器短信平台-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>${aliyun.dysmsapi.version}</version>
             </dependency>
             <!-- spring security安全框架 -->
             <dependency>
