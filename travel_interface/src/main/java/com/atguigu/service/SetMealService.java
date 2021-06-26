@@ -8,6 +8,7 @@ import com.atguigu.pojo.Setmeal;
 import java.util.List;
 
 public interface SetMealService {
+
     PageResult findPages(QueryPageBean queryPageBean);
 
     void add(Setmeal setmeal,Integer[] travelgroupIds);
@@ -19,4 +20,8 @@ public interface SetMealService {
     List<Integer> findArrByMealId(Integer id);
 
     void delete(Integer id);
+
+
+
+
 }
