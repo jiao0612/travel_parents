@@ -7,6 +7,7 @@ import com.atguigu.entity.QueryPageBean;
 import com.atguigu.entity.Result;
 import com.atguigu.pojo.TravelItem;
 import com.atguigu.service.TravelItemService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,12 +18,17 @@ public class TravelItemController {
     @Reference
     private TravelItemService travelItemService;
 
-    /**
-    *@Author dell
-    *@Date travelitem
-    *@returnType:result
-    *@Description: 增加自由行数据
-    */
+    @RequestMapping(value = "/selectPages",method = RequestMethod.POST)
+    public PageResult select( @RequestBody QueryPageBean queryPageBean){
+        return travelItemService.selectByPage(queryPageBean);
+    }
+
+    @RequestMapping(value = "/findPages",method = RequestMethod.POST)
+    public PageResult findPages(){
+        return travelItemService.findAll();
+    }
+
+    @PreAuthorize("hasAuthority('TRAVELITEM_ADD')")//权限校验
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Result response(@RequestBody TravelItem travelItem){
 
@@ -34,27 +40,8 @@ public class TravelItemController {
             return new Result(false, MessageConstant.ADD_TRAVELITEM_FAIL);
         }
     }
-    /**
-    *@Author dell
-    *@Date ：所要查询的页数，pageNum
-    *@returnType:json
-    *@Description:异步显示自由行的分页数据
-    */
-    @RequestMapping(value = "/selectPages",method = RequestMethod.POST)
-    public PageResult select( @RequestBody QueryPageBean queryPageBean){
-        return travelItemService.selectByPage(queryPageBean);
-    }
-    @RequestMapping(value = "/findPages",method = RequestMethod.POST)
-    public PageResult findPages(){
-        return travelItemService.findAll();
-    }
 
-    /**
-    *@Author dell
-    *@Date :row
-    *@returnType:result
-    *@Description:根据row删除自由行
-    */
+    @PreAuthorize("hasAuthority('TRAVELITEM_DELETE')")
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Result delete(@RequestBody TravelItem row){
         try {
@@ -70,12 +57,7 @@ public class TravelItemController {
         }
     }
 
-    /**
-    *@Author dell
-    *@Date :travelitem
-    *@returnType:result
-    *@Description: 更新自由行数据
-    */
+    @PreAuthorize("hasAuthority('TRAVELITEM_EDIT')")
     @RequestMapping(value = "/edit",method =RequestMethod.POST)
     public Result update(@RequestBody TravelItem travelItem){
         try {

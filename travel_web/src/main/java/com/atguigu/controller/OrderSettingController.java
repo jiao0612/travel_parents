@@ -7,6 +7,7 @@ import com.atguigu.pojo.OrderSetting;
 import com.atguigu.service.OrderSettingService;
 import com.atguigu.util.POIUtils;
 import org.aspectj.weaver.ast.Var;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,18 @@ public class OrderSettingController {
     @Reference
     private OrderSettingService orderSettingService;
 
+    @RequestMapping(value = "/findTableList",method = RequestMethod.GET)
+    public Result findTableList(String orderDate){
+        try {
+            List<Map<String,Integer>> list = orderSettingService.findTableList(orderDate);
+            return new Result(true,MessageConstant.QUERY_ORDER_SUCCESS,list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(true,MessageConstant.QUERY_ORDER_FAIL);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ORDERSETTING')")
     @RequestMapping(value = "/upload")
     public Result upload(@RequestBody MultipartFile multipartFile){
         try {
@@ -46,17 +59,7 @@ public class OrderSettingController {
         }
     }
 
-    @RequestMapping(value = "/findTableList",method = RequestMethod.GET)
-    public Result findTableList(String orderDate){
-        try {
-            List<Map<String,Integer>> list = orderSettingService.findTableList(orderDate);
-            return new Result(true,MessageConstant.QUERY_ORDER_SUCCESS,list);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(true,MessageConstant.QUERY_ORDER_FAIL);
-        }
-    }
-
+    @PreAuthorize("hasAuthority('ORDERSETTING')")
     @RequestMapping(value = "/setNumByOrderDate",method = RequestMethod.POST)
     public Result setNumByOrderDate(@RequestBody OrderSetting orderSetting){
 

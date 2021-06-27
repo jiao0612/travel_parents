@@ -10,6 +10,7 @@ import com.atguigu.pojo.Setmeal;
 import com.atguigu.service.SetMealService;
 import com.atguigu.util.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.JedisPool;
@@ -57,18 +58,6 @@ public class SetMealController {
         return setMealService.findPages(queryPageBean);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Result add(@RequestBody Setmeal setmeal , Integer[] travelgroupIds) {
-        /*增加套餐信息*/
-        try {
-            setMealService.add(setmeal,travelgroupIds);
-            return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return  new Result(false, MessageConstant.ADD_SETMEAL_FAIL);
-        }
-    }
-
     @RequestMapping(value = "/findPagesById", method = RequestMethod.GET)
     public Result findPagesById(Integer id){
         return setMealService.findPagesById(id);
@@ -85,17 +74,20 @@ public class SetMealController {
         }
     }
 
-    @RequestMapping(value = "/updateMealById", method = RequestMethod.POST)
-    public Result updateMealById(@RequestBody Setmeal setmeal,Integer[] travelgroupIds){
+    @PreAuthorize("hasAuthority('SETMEAL_ADD')")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Result add(@RequestBody Setmeal setmeal , Integer[] travelgroupIds) {
+        /*增加套餐信息*/
         try {
-            setMealService.updateMealById(setmeal,travelgroupIds);
-            return new Result(true, MessageConstant.EDIT_SETMEAL_SUCEESS);
+            setMealService.add(setmeal,travelgroupIds);
+            return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, MessageConstant.EDIT_SETMEAL_FILE);
+            return  new Result(false, MessageConstant.ADD_SETMEAL_FAIL);
         }
     }
 
+    @PreAuthorize("hasAuthority('SETMEAL_DELETE')")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public Result delete(Integer id){
         try {
@@ -107,6 +99,18 @@ public class SetMealController {
         }catch (Exception e){
             e.printStackTrace();
             return new Result(false, MessageConstant.DELETE_MEAL_FILE);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('SETMEAL_EDIT')")
+    @RequestMapping(value = "/updateMealById", method = RequestMethod.POST)
+    public Result updateMealById(@RequestBody Setmeal setmeal,Integer[] travelgroupIds){
+        try {
+            setMealService.updateMealById(setmeal,travelgroupIds);
+            return new Result(true, MessageConstant.EDIT_SETMEAL_SUCEESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.EDIT_SETMEAL_FILE);
         }
     }
 

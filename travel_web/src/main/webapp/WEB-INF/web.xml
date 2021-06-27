@@ -21,6 +21,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--代理权限过滤器-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <!--配置mvc的核心控制器-->
     <servlet>
